@@ -3,7 +3,7 @@ if (!global.db) {
     db = pgp(process.env.DB_URL);
 }
 
-function list(userid,start){
+function list(userid='',start){
   const where =[];
   if(userid)
       where.push(`userid = $1`);
@@ -31,7 +31,7 @@ function eventinfo(eventid){
   console.log(eventid);
   return db.any(sql,[eventid]);
 }
-function create(eventname='',datetime,mindeposite,maxdeposite,address='',about='',latitude,longitude,hoster,hostername=''){
+function create(eventname='',datetime,mindeposite,maxdeposite,address='',about='',latitude,longitude,hoster='',hostername=''){
   const sql = `
     INSERT INTO events ($<this:name>)
     VALUES ($<eventname>,$<datetime>,$<mindeposite>,$<maxdeposite>,$<address>,$<about>,$<latitude>,$<longitude>,$<hoster>,$<hostername>)

@@ -20,7 +20,7 @@ function infoall(){
   `;
   return db.any(sql);
 }
-function info(userid){
+function info(userid=''){
     const sql = `
     SELECT *
     FROM userinfo
@@ -28,7 +28,7 @@ function info(userid){
     `;
     return db.one(sql,[userid]);
 }
-function add(userid,username='',userphonenumber=''){
+function add(userid='',username='',userphonenumber=''){
   const sql = `
   INSERT INTO userinfo($<this:name>)
   VALUES
@@ -37,7 +37,7 @@ function add(userid,username='',userphonenumber=''){
   `;
   return db.one(sql,{userid,username,userphonenumber});
 }
-function modify(userid,username,usercoins,userphonenumber){
+function modify(userid='',username,usercoins,userphonenumber){
     const sql =`
     UPDATE userinfo SET username = $2,usercoins = $3,userphonenumber = $4 WHERE userid = $1
     RETURNING *`;

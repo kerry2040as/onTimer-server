@@ -28,13 +28,13 @@ const schemaSql = `
         about           text,
         latitude        double precision,
         longitude       double precision,
-        hoster          serial,
+        hoster          text,
         hostername      text,
         totalmoney      real NOT NULL DEFAULT 0,
         ts              bigint NOT NULL DEFAULT (extract(epoch from now()))
     );
     CREATE TABLE userinfo (
-        userid          serial,
+        userid          text,
         userpicture     bytea,
         username        text,
         usercoins       integer NOT NULL DEFAULT 0,
@@ -43,7 +43,7 @@ const schemaSql = `
     );
     CREATE TABLE members (
         id             serial PRIMARY KEY NOT NULL,
-        userid         serial,
+        userid         text,
         username       text,
         eventid        serial,
         eventname      text,
