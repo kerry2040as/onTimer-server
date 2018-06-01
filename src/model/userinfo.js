@@ -25,8 +25,9 @@ function info(userid=''){
     SELECT *
     FROM userinfo
     WHERE userid = $1
+    ORDER BY userid LIMIT 10
     `;
-    return db.one(sql,[userid]);
+    return db.any(sql,[userid]);
 }
 function add(userid='',username='',userphonenumber=''){
   const sql = `
