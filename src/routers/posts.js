@@ -70,6 +70,12 @@ router.post('/modifyuser', function(req,res,next){
       res.json(events);
   }).catch(next);
 });
+router.get('/userinfoall',function(req,res,next){
+  const {eventid}=req.body;
+  membersModel.list(evenntid).then(events =>{
+    res.json(events);
+  }).catch(next);
+});
 // //List todos
 // router.get('/todos',function(req,res,next){
 //   const {unaccomplishedOnly,searchText,start} = req.query;

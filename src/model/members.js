@@ -2,6 +2,15 @@ if (!global.db) {
     const pgp = require('pg-promise')();
     db = pgp(process.env.DB_URL);
 }
+function list(eventid){
+  const sql = `
+  SELECT *
+  FROM members
+  WHERE eventid = $1
+  ORDER BY userid
+  `;
+  return db.any(sql,[eventid]);
+}
 function add(userid='',username='',eventid,eventname='',deposite,hostname=''){
   const sql =`
     INSERT INTO members ($<this:name>)
@@ -9,6 +18,7 @@ function add(userid='',username='',eventid,eventname='',deposite,hostname=''){
     ($<userid>,$<username>,$<eventid>,$<eventname>,$<deposite>,$<hostname>)
     RETURNING *
   `;
+  db.any(`UPDATE events SET totalmoney = totalmoney+$2 WHERE eventid = $1`,[eventid,deposite]);
   return db.one(sql,{userid,username,eventid,eventname,deposite,hostname});
 }
 function remove(userid='',eventid){
@@ -20,5 +30,6 @@ function remove(userid='',eventid){
 }
 module.exports = {
   add,
-  remove
+  remove,
+  list
 };
