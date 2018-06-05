@@ -71,8 +71,8 @@ router.post('/modifyuser', function(req,res,next){
   }).catch(next);
 });
 router.get('/listmember',function(req,res,next){
-  const {eventid}=req.body;
-  membersModel.list(evenntid).then(events =>{
+  const {eventid}=req.query;
+  membersModel.listmember(eventid).then(events =>{
     res.json(events);
   }).catch(next);
 });

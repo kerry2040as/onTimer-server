@@ -2,13 +2,14 @@ if (!global.db) {
     const pgp = require('pg-promise')();
     db = pgp(process.env.DB_URL);
 }
-function list(eventid){
+function listmember(eventid){
   const sql = `
   SELECT *
   FROM members
   WHERE eventid = $1
-  ORDER BY userid
   `;
+  console.log(sql);
+  console.log(eventid);
   return db.any(sql,[eventid]);
 }
 function add(userid='',username='',eventid,eventname='',deposite,hostname=''){
@@ -31,5 +32,5 @@ function remove(userid='',eventid){
 module.exports = {
   add,
   remove,
-  list
+  listmember
 };
