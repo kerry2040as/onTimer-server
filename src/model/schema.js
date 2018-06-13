@@ -10,12 +10,10 @@ const schemaSql = `
     --DROP INDEX IF EXISTS posts_idx_text;
     --DROP INDEX IF EXISTS posts_idx_ts;
     --DROP TABLE IF EXISTS events;
-    --DROP TYPE IF EXISTS mood CASCADE;
-    --DROP TYPE IF EXISTS moods CASCADE;
+    --DROP TYPE IF EXISTS  userinfo;
     DROP TABLE IF EXISTS userInfo;
     DROP TABLE IF EXISTS events;
     DROP TABLE IF EXISTS userinfo;
-    DROP TABLE IF EXISTS eventmember;
     DROP TABLE IF EXISTS members;
 
     CREATE TABLE events (
@@ -39,7 +37,8 @@ const schemaSql = `
         username        text,
         usercoins       integer NOT NULL DEFAULT 0,
         userphonenumber text,
-        ts              bigint NOT NULL DEFAULT (extract(epoch from now()))
+        ts              bigint NOT NULL DEFAULT (extract(epoch from now())),
+        token           text
     );
     CREATE TABLE members (
         id             serial PRIMARY KEY NOT NULL,
@@ -48,7 +47,11 @@ const schemaSql = `
         eventid        serial,
         eventname      text,
         deposite       real,
-        hostname       text
+        hostname       text,
+        datetime       bigint,
+        arrivetime     bigint,
+        late           boolean DEFAULT TRUE,
+        confirm        int
     );
 
     -- CREATE INDEX posts_idx_ts ON posts USING btree(ts);
@@ -95,10 +98,11 @@ const dataSql = `
 console.log("hello");
 db.none(schemaSql).then(() => {
     console.log('Schema created');
-    db.none(dataSql).then(() => {
-        console.log('Data populated');
-        pgp.end();
-    });
+    // db.none(dataSql).then(() => {
+    //     console.log('Data populated');
+
+    // });
+    pgp.end();
 }).catch(err => {
     console.log('Error creating schema', err);
 });

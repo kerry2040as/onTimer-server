@@ -13,7 +13,7 @@ function list(userid='',start){
       SELECT *
       FROM members
       ${where.length ? 'WHERE ' + where.join(' AND ') : ''}
-      ORDER BY id DESC
+      ORDER BY datetime ASC
       LIMIT 10
   `;
   console.log('here is');
@@ -46,36 +46,32 @@ function modify(eventid,eventname='',datetime,mindeposite,maxdeposite,address=''
   `;
     return db.one(sql,[eventname,datetime,mindeposite,maxdeposite,address,about,latitude,longitude,eventid]);
 }
-// function list(searchText = '', start) {
-//     const where = [];
-//     if (searchText)
-//         where.push(`text ILIKE '%$1:value%'`);
-//     if (start)
-//         where.push('id < $2');
-//     const sql = `
-//         SELECT *
-//         FROM posts
-//         ${where.length ? 'WHERE ' + where.join(' AND ') : ''}
-//         ORDER BY id DESC
-//         LIMIT 10
-//     `;
-//     console.log("here is");
-//     console.log(sql);
-//     return db.any(sql, [searchText, start]);
-// }
-
-// function create(mood, text) {
-//     const sql = `
-//         INSERT INTO posts ($<this:name>)
-//         VALUES ($<mood>, $<text>)
-//         RETURNING *
-//     `;
-//     return db.one(sql, {mood, text});
-// }
-//
+function remove(userid='',eventid){
+  const sql =`
+  DELETE FROM events
+  WHERE hoster=$1 AND eventid =$2
+  `;
+  return db.result(sql,[userid,eventid]);
+}
+function infoall(){
+  const sql = `
+  SELECT * FROM events  ORDER BY datetime ASC LIMIT 30
+  `;
+  return db.any(sql);
+}
+function modifymoney(eventid,userid,money){
+  const sql = `
+    UPDATE events SET totalmoney=$3 WHERE eventid=$1 AND hoster=$2
+    RETURNING *
+  `;
+    return db.one(sql,[eventid,userid,money]);
+}
 module.exports = {
     list,
     create,
     eventinfo,
-    modify
+    modify,
+    remove,
+    infoall,
+    modifymoney
 };

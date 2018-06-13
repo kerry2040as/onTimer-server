@@ -29,15 +29,38 @@ router.get('/eventinfo',function(req,res,next){
       res.json(events);
   }).catch(next);
 });
+router.get('/eventinfoall',function(req,res,next){
+  eventsModel.infoall().then(events =>{
+    res.json(events);
+  }).catch(next);
+});
 router.post('/modifyevents', function(req,res,next){
   const {eventid,eventname,datetime,mindeposite,maxdeposite,address,about,latitude,longitude,hoster}=req.body;
   eventsModel.modify(eventid,eventname,datetime,mindeposite,maxdeposite,address,about,latitude,longitude).then(events =>{
       res.json(events);
   }).catch(next);
 });
+router.post('/modifymoney', function(req,res,next){
+  const {eventid,userid,money}=req.body;
+  eventsModel.modifymoney(eventid,userid,money).then(events =>{
+      res.json(events);
+  }).catch(next);
+});
+router.post('/remevent', function(req,res,next){
+  const {userid,eventid}=req.body;
+  eventsModel.remove(userid,eventid).then(events =>{
+      res.json(events);
+  }).catch(next);
+});
 router.post('/addmembers', function(req,res,next){
-  const {userid,username,eventid,eventname,deposite,hostname}=req.body;
-  membersModel.add(userid,username,eventid,eventname,deposite,hostname).then(events =>{
+  const {userid,username,eventid,eventname,deposite,hostname,confirm,datetime}=req.body;
+  membersModel.add(userid,username,eventid,eventname,deposite,hostname,confirm,datetime).then(events =>{
+      res.json(events);
+  }).catch(next);
+});
+router.post('/modifymembers', function(req,res,next){
+  const {userid,username,eventid,eventname,deposite,hostname,confirm}=req.body;
+  membersModel.modify(userid,username,eventid,eventname,deposite,hostname,confirm).then(events =>{
       res.json(events);
   }).catch(next);
 });
