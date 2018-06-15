@@ -5,11 +5,26 @@ const accessController = require('../middleware/access-controller.js');
 const eventsModel = require('../model/events.js');
 const membersModel = require('../model/members.js');
 const userinfoModel = require('../model/userinfo.js');
+const enddateModel  = require('../model/endDate.js');
 const router = express.Router();
 
 router.use(bodyParser.json());
 router.use(accessController); // Allows cross-origin HTTP requests
 
+//test share money
+router.get('/sharemoney', function(req, res, next) {
+    const {eventid} = req.query;
+    enddateModel.sharemoney(eventid).then(events => {
+        console.log("finishshare");
+        res.json(events);
+    }).catch(next);
+});
+router.post('/arrive', function(req,res,next){
+    const {eventid,userid,arrivetime,late}=req.body;
+    enddateModel.arrive(eventid,userid,arrivetime,late).then(events => {
+        res.json(events);
+    }).catch(next);
+});
 // List
 router.get('/events', function(req, res, next) {
     const {userid, start} = req.query;
@@ -17,6 +32,7 @@ router.get('/events', function(req, res, next) {
         res.json(events);
     }).catch(next);
 });
+
 router.post('/createvents', function(req,res,next){
     const {eventname,datetime,mindeposite,maxdeposite,address,about,latitude,longitude,hoster,hostername}=req.body;
     eventsModel.create(eventname,datetime,mindeposite,maxdeposite,address,about,latitude,longitude,hoster,hostername).then(events => {

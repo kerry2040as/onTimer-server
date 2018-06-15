@@ -44,9 +44,18 @@ function modify(userid='',username,usercoins,userphonenumber){
     RETURNING *`;
     return db.one(sql,[userid,username,usercoins,userphonenumber]);
 }
+function addmoney(userid='',usercoins){
+    const sql =`
+    UPDATE userinfo set usercoins = usercoins + $2 WHERE userid= $1
+    RETURNING *
+    `;
+    console.log("modifyMoney!!!!!----------")
+    return db.any(sql,[userid,usercoins]);
+}
 module.exports = {
     info,
     add,
     infoall,
-    modify
+    modify,
+    addmoney
 };
