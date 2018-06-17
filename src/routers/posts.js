@@ -133,6 +133,19 @@ router.get('/memberinfo',function(req,res,next){
     res.json(events);
   }).catch(next);
 });
+router.get('/logByUser',function(req,res,next){
+  const {userid}=req.query;
+  enddateModel.logByUser(userid).then(events =>{
+    res.json(events);
+  }).catch(next);
+});
+router.get('/logByEvent',function(req,res,next){
+  const {eventid}=req.query;
+  enddateModel.logByEvent(eventid).then(events =>{
+    res.json(events);
+  }).catch(next);
+});
+
 // //List todos
 // router.get('/todos',function(req,res,next){
 //   const {unaccomplishedOnly,searchText,start} = req.query;

@@ -53,6 +53,14 @@ const schemaSql = `
         late           boolean DEFAULT TRUE,
         confirm        int
     );
+    CREATE TABLE cashflow (
+        id             serial PRIMARY KEY NOT NULL,
+        userid         text,
+        username       text,
+        eventid        serial,
+        eventname      text,
+        cashflow       integer NOT NULL DEFAULT 0
+    );
 
     -- CREATE INDEX posts_idx_ts ON posts USING btree(ts);
     -- CREATE INDEX posts_idx_text ON posts USING gin(text gin_trgm_ops);

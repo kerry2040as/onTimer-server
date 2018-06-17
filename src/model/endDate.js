@@ -36,6 +36,20 @@ function sharemoney(eventid){
         console.log("還錢，顯示殘存獎金:");
         console.log(sharemoney);
         havepeoplewin=1;
+      }else{
+        var cashflow=0-elements.deposite;
+        const sql_no_money = `
+        INSERT INTO cashflow ($<this:name>)
+        VALUES
+        ($<userid>,$<username>,$<eventid>,$<eventname>,$<cashflow>)
+        RETURNING *
+        `;
+        var userid=elements.userid;
+        var username=elements.username;
+        var eventid=elements.eventid;
+        var eventname=elements.eventname;
+        var log=db.one(sql_no_money,{userid,username,eventid,eventname,cashflow});
+        console.log(log);
       }
     });
     console.log("放入了");
@@ -48,6 +62,19 @@ function sharemoney(eventid){
         var gain = elements.deposite/basemoney*sharemoney;
         console.log("userid: " + elements.userid + "分到" + gain );
         userinfoModel.addmoney(elements.userid,gain);
+        var cashflow=gain;
+        const sql_money = `
+        INSERT INTO cashflow ($<this:name>)
+        VALUES
+        ($<userid>,$<username>,$<eventid>,$<eventname>,$<cashflow>)
+        RETURNING *
+        `;
+        var userid=elements.userid;
+        var username=elements.username;
+        var eventid=elements.eventid;
+        var eventname=elements.eventname;
+        db.one(sql_money,{userid,username,eventid,eventname,cashflow});
+
       });
     }else{
       console.log("沒有人不遲到");
@@ -66,8 +93,28 @@ function arrive(eventid,userid='',arrivetime,late){
     RETURNING *`;
     return db.one(sql,[eventid,userid,arrivetime,late]);
 }
+function logByUser(userid=''){
+
+  const sql = `
+      SELECT *
+      FROM cashflow
+      WHERE userid = $1
+  `;
+  return db.any(sql,[userid]);
+}
+function logByEvent(eventid){
+
+  const sql = `
+      SELECT *
+      FROM cashflow
+      WHERE eventid = $1
+  `;
+  return db.any(sql,[eventid]);
+}
 
 module.exports = {
     sharemoney,
-    arrive
+    arrive,
+    logByEvent,
+    logByUser
 };
