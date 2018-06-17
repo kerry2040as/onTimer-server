@@ -118,6 +118,8 @@ function confirm(eventid,userid){
     UPDATE members SET confirm = $3 WHERE userid=$1 AND eventid=$2
     RETURNING *
   `;
+  db.any(`UPDATE userinfo SET usercoins = usercoins-$2 WHERE userid = $1`,[userid,deposite]);
+  db.any(`UPDATE events SET totalmoney = totalmoney+$2 WHERE eventid = $1`,[eventid,deposite]);
     return db.any(sql,[userid,eventid,confirm]);
 }
 
