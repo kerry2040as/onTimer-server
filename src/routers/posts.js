@@ -74,6 +74,18 @@ router.post('/addmembers', function(req,res,next){
       res.json(events);
   }).catch(next);
 });
+router.post('/invitemembers', function(req,res,next){
+  const {userid,username,eventid,eventname,deposite,hostname,datetime}=req.body;
+  membersModel.invitemembers(userid,username,eventid,eventname,deposite,hostname,datetime).then(events =>{
+      res.json(events);
+  }).catch(next);
+});
+router.get('/confirmevents',function(req,res,next){
+  const{eventid,userid}=req.query;
+  membersModel.confirm(eventid,userid).then(events =>{
+      res.json(events);
+  }).catch(next);
+});
 router.post('/modifymembers', function(req,res,next){
   const {userid,username,eventid,eventname,deposite,hostname,confirm}=req.body;
   membersModel.modify(userid,username,eventid,eventname,deposite,hostname,confirm).then(events =>{
@@ -112,6 +124,12 @@ router.post('/modifyuser', function(req,res,next){
 router.get('/listmember',function(req,res,next){
   const {eventid}=req.query;
   membersModel.listmember(eventid).then(events =>{
+    res.json(events);
+  }).catch(next);
+});
+router.get('/memberinfo',function(req,res,next){
+  const {eventid,userid}=req.query;
+  membersModel.memberinfo(eventid,userid).then(events =>{
     res.json(events);
   }).catch(next);
 });
