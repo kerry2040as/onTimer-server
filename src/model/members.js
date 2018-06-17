@@ -111,7 +111,7 @@ function invitemembers(userid='',username='',eventid,eventname='',deposite,hostn
 //   db.any(`UPDATE events SET totalmoney = totalmoney+$2 WHERE eventid = $1`,[eventid,deposite]);
 //   return db.one(sql,{userid,username,eventid,eventname,deposite,hostname,confirm,datetime});
 // }
-function confirm(eventid,userid){
+function confirm(eventid,userid,deposite){
   confirm = 1;
   console.log("enter confirm");
   const sql = `

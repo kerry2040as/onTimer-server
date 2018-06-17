@@ -81,8 +81,8 @@ router.post('/invitemembers', function(req,res,next){
   }).catch(next);
 });
 router.get('/confirmevents',function(req,res,next){
-  const{eventid,userid}=req.query;
-  membersModel.confirm(eventid,userid).then(events =>{
+  const{eventid,userid,deposite}=req.query;
+  membersModel.confirm(eventid,userid,deposite).then(events =>{
       res.json(events);
   }).catch(next);
 });
