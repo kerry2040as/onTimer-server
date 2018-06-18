@@ -41,14 +41,15 @@ function sharemoney(eventid){
         const sql_no_money = `
         INSERT INTO cashflow ($<this:name>)
         VALUES
-        ($<userid>,$<username>,$<eventid>,$<eventname>,$<cashflow>)
+        ($<userid>,$<username>,$<eventid>,$<eventname>,$<cashflow>,$<datetime>)
         RETURNING *
         `;
         var userid=elements.userid;
         var username=elements.username;
         var eventid=elements.eventid;
         var eventname=elements.eventname;
-        var log=db.one(sql_no_money,{userid,username,eventid,eventname,cashflow});
+        var datetime=elements.datetime;
+        var log=db.one(sql_no_money,{userid,username,eventid,eventname,cashflow,datetime});
         console.log(log);
       }
     });
@@ -66,14 +67,15 @@ function sharemoney(eventid){
         const sql_money = `
         INSERT INTO cashflow ($<this:name>)
         VALUES
-        ($<userid>,$<username>,$<eventid>,$<eventname>,$<cashflow>)
+        ($<userid>,$<username>,$<eventid>,$<eventname>,$<cashflow>,$<datetime>)
         RETURNING *
         `;
         var userid=elements.userid;
         var username=elements.username;
         var eventid=elements.eventid;
         var eventname=elements.eventname;
-        db.one(sql_money,{userid,username,eventid,eventname,cashflow});
+        var datetime=elements.datetime;
+        db.one(sql_money,{userid,username,eventid,eventname,cashflow,datetime});
 
       });
     }else{

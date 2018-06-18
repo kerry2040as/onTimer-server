@@ -59,7 +59,8 @@ const schemaSql = `
         username       text,
         eventid        serial,
         eventname      text,
-        cashflow       integer NOT NULL DEFAULT 0
+        cashflow       integer NOT NULL DEFAULT 0,
+        datetime       bigint
     );
 
     -- CREATE INDEX posts_idx_ts ON posts USING btree(ts);
