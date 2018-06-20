@@ -15,13 +15,14 @@ const schemaSql = `
     DROP TABLE IF EXISTS events;
     DROP TABLE IF EXISTS userinfo;
     DROP TABLE IF EXISTS members;
+    DROP TABLE IF EXISTS cashflow;
 
     CREATE TABLE events (
         eventid         serial PRIMARY KEY NOT NULL,
         eventname       text,
         datetime        bigint,
-        mindeposite     integer,
-        maxdeposite     integer,
+        mindeposit      integer,
+        maxdeposit      integer,
         address         text,
         about           text,
         latitude        double precision,
@@ -29,16 +30,23 @@ const schemaSql = `
         hoster          text,
         hostername      text,
         totalmoney      real NOT NULL DEFAULT 0,
+        status          integer default 0,
+        currency        integer default 0,
         ts              bigint NOT NULL DEFAULT (extract(epoch from now()))
     );
     CREATE TABLE userinfo (
+        id              serial PRIMARY KEY NOT NULL,
         userid          text,
         userpicture     bytea,
         username        text,
+        userprofile     text,
         usercoins       integer NOT NULL DEFAULT 0,
+        currency        integer default 0,
         userphonenumber text,
+        preparetime     bigint,
         ts              bigint NOT NULL DEFAULT (extract(epoch from now())),
-        token           text
+        token           text,
+        status          integer default 0
     );
     CREATE TABLE members (
         id             serial PRIMARY KEY NOT NULL,
@@ -46,12 +54,15 @@ const schemaSql = `
         username       text,
         eventid        serial,
         eventname      text,
-        deposite       real,
-        hostname       text,
+        deposit        real,
+        hostername     text,
         datetime       bigint,
+        alarmtime      bigint,
         arrivetime     bigint,
         late           boolean DEFAULT TRUE,
-        confirm        int
+        confirm        int,
+        status          int default 0,
+
     );
     CREATE TABLE cashflow (
         id             serial PRIMARY KEY NOT NULL,

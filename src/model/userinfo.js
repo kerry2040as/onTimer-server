@@ -52,10 +52,25 @@ function addmoney(userid='',usercoins){
     console.log("modifyMoney!!!!!----------")
     return db.any(sql,[userid,usercoins]);
 }
+function modifyprofile(userid='',userprofile=''){
+  const sql =`
+  UPDATE userinfo SET userprofile = $2 WHERE userid = $1
+  RETURNING *`;
+  return db.one(sql,[userid,userprofile]);
+}
+function modifypreparetime(userid='',preparetime){
+  const sql =`
+  UPDATE userinfo SET preparetime = $2 WHERE userid = $1
+  RETURNING *
+  `;
+  return db.one(sql,[userid,preparetime]);
+}
 module.exports = {
     info,
     add,
     infoall,
     modify,
-    addmoney
+    addmoney,
+    modifyprofile,
+    modifypreparetime
 };

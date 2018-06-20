@@ -18,9 +18,9 @@ function memberinfo(eventid,userid=''){
   `;
   return db.any(sql,[eventid,userid]);
 }
-function add(userid='',username='',eventid,eventname='',deposite,hostname='',confirm,datetime){
+function add(userid='',username='',eventid,eventname='',deposit,hostername='',datetime,alarmtime){
 
-
+  var confirm = 1;
   const sql_init=`
   SELECT * FROM members WHERE eventid = $1 AND userid= $2
   `;
@@ -35,37 +35,25 @@ function add(userid='',username='',eventid,eventname='',deposite,hostname='',con
         sql =`
         INSERT INTO members ($<this:name>)
           VALUES
-          ($<userid>,$<username>,$<eventid>,$<eventname>,$<deposite>,$<hostname>,$<confirm>,$<datetime>)
+          ($<userid>,$<username>,$<eventid>,$<eventname>,$<deposit>,$<hostername>,$<datetime>,$<alarmtime>,$<confirm>)
           RETURNING *
         `;
-          db.any(`UPDATE userinfo SET usercoins = usercoins-$2 WHERE userid = $1`,[userid,deposite]);
-          db.any(`UPDATE events SET totalmoney = totalmoney+$2 WHERE eventid = $1`,[eventid,deposite]);
-          return db.one(sql,{userid,username,eventid,eventname,deposite,hostname,confirm,datetime});
+          db.any(`UPDATE userinfo SET usercoins = usercoins-$2 WHERE userid = $1`,[userid,deposit]);
+          db.any(`UPDATE events SET totalmoney = totalmoney+$2 WHERE eventid = $1`,[eventid,deposit]);
+          return db.one(sql,{userid,username,eventid,eventname,deposit,hostername,datetime,alarmtime,confirm});
       }
     }
   );
 
 }
 
-// function add(userid='',username='',eventid,eventname='',deposite,hostname='',confirm,datetime){
-//   const sql =`
-//     INSERT INTO members ($<this:name>)
-//     VALUES
-//     ($<userid>,$<username>,$<eventid>,$<eventname>,$<deposite>,$<hostname>,$<confirm>,$<datetime>)
-//     RETURNING *
-//   `;
-//     db.any(`UPDATE userinfo SET usercoins = usercoins-$2 WHERE userid = $1`,[userid,deposite]);
-//   db.any(`UPDATE events SET totalmoney = totalmoney+$2 WHERE eventid = $1`,[eventid,deposite]);
-//   return db.one(sql,{userid,username,eventid,eventname,deposite,hostname,confirm,datetime});
-// }
-
-function modify(userid='',username='',eventid,eventname='',deposite,hostname='',confirm){
+function modify(userid='',username='',eventid,eventname='',hostername='',alarmtime,confirm){
   console.log("enter modify");
   const sql = `
-    UPDATE members SET username = $2,eventname = $4,hostname = $6,confirm =$7 WHERE userid=$1 AND eventid = $3
+    UPDATE members SET username = $3,eventname = $4,hostername = $5,alarmtime=$6,confirm =$7 WHERE userid=$1 AND eventid = $2
     RETURNING *
   `;
-    return db.any(sql,[userid,username,eventid,eventname,deposite,hostname,confirm]);
+    return db.any(sql,[userid,eventid,username,eventname,hostername,alarmtime,confirm]);
 }
 function remove(userid='',eventid){
   const sql =`
@@ -74,7 +62,7 @@ function remove(userid='',eventid){
   `;
   return db.result(sql,[userid,eventid]);
 }
-function invitemembers(userid='',username='',eventid,eventname='',deposite,hostname='',datetime){
+function invitemembers(userid='',username='',eventid,eventname='',deposit,hostername='',datetime,alarmtime){
   var confirm = 0;
   const sql_init=`
   SELECT * FROM members WHERE eventid = $1 AND userid= $2
@@ -90,39 +78,35 @@ function invitemembers(userid='',username='',eventid,eventname='',deposite,hostn
         sql =`
         INSERT INTO members ($<this:name>)
           VALUES
-          ($<userid>,$<username>,$<eventid>,$<eventname>,$<deposite>,$<hostname>,$<confirm>,$<datetime>)
+          ($<userid>,$<username>,$<eventid>,$<eventname>,$<deposit>,$<hostername>,$<alarmtime>,$<confirm>,$<datetime>)
           RETURNING *
         `;
-          return db.one(sql,{userid,username,eventid,eventname,deposite,hostname,confirm,datetime});
+          return db.one(sql,{userid,username,eventid,eventname,deposit,hostername,alarmtime,confirm,datetime});
       }
     }
   );
 
 }
 
-// function add(userid='',username='',eventid,eventname='',deposite,hostname='',confirm,datetime){
-//   const sql =`
-//     INSERT INTO members ($<this:name>)
-//     VALUES
-//     ($<userid>,$<username>,$<eventid>,$<eventname>,$<deposite>,$<hostname>,$<confirm>,$<datetime>)
-//     RETURNING *
-//   `;
-//     db.any(`UPDATE userinfo SET usercoins = usercoins-$2 WHERE userid = $1`,[userid,deposite]);
-//   db.any(`UPDATE events SET totalmoney = totalmoney+$2 WHERE eventid = $1`,[eventid,deposite]);
-//   return db.one(sql,{userid,username,eventid,eventname,deposite,hostname,confirm,datetime});
 // }
-function confirm(eventid,userid,deposite){
+function confirm(eventid,userid,deposit){
   confirm = 1;
   console.log("enter confirm");
   const sql = `
-    UPDATE members SET confirm = $3 WHERE userid=$1 AND eventid=$2
+    UPDATE members SET confirm = $3,deposit = $4  WHERE userid=$1 AND eventid=$2
     RETURNING *
   `;
-  db.any(`UPDATE userinfo SET usercoins = usercoins-$2 WHERE userid = $1`,[userid,deposite]);
-  db.any(`UPDATE events SET totalmoney = totalmoney+$2 WHERE eventid = $1`,[eventid,deposite]);
-    return db.any(sql,[userid,eventid,confirm]);
+  db.any(`UPDATE userinfo SET usercoins = usercoins-$2 WHERE userid = $1`,[userid,deposit]);
+  db.any(`UPDATE events SET totalmoney = totalmoney+$2 WHERE eventid = $1`,[eventid,deposit]);
+    return db.any(sql,[userid,eventid,confirm,deposit]);
 }
-
+function deleteallmember(eventid){
+  const sql =`
+  DELETE FROM members
+  WHERE  eventid =$1
+  `;
+  return db.result(sql,[eventid]);
+}
 module.exports = {
   add,
   remove,
@@ -130,5 +114,6 @@ module.exports = {
   listmember,
   memberinfo,
   invitemembers,
-  confirm
+  confirm,
+  deleteallmember
 };

@@ -31,26 +31,28 @@ function eventinfo(eventid){
   console.log(eventid);
   return db.any(sql,[eventid]);
 }
-function create(eventname='',datetime,mindeposite,maxdeposite,address='',about='',latitude,longitude,hoster='',hostername=''){
+function create(eventname='',datetime,mindeposit,maxdeposit,address='',about='',latitude,longitude,hoster='',hostername=''){
   const sql = `
     INSERT INTO events ($<this:name>)
-    VALUES ($<eventname>,$<datetime>,$<mindeposite>,$<maxdeposite>,$<address>,$<about>,$<latitude>,$<longitude>,$<hoster>,$<hostername>)
+    VALUES ($<eventname>,$<datetime>,$<mindeposit>,$<maxdeposit>,$<address>,$<about>,$<latitude>,$<longitude>,$<hoster>,$<hostername>)
     RETURNING *
   `;
-    return db.one(sql,{eventname,datetime,mindeposite,maxdeposite,address,about,latitude,longitude,hoster,hostername});
+    return db.one(sql,{eventname,datetime,mindeposit,maxdeposit,address,about,latitude,longitude,hoster,hostername});
 }
-function modify(eventid,eventname='',datetime,mindeposite,maxdeposite,address='',about='',latitude,longitude){
+function modify(eventid,eventname='',datetime,mindeposit,maxdeposit,address='',about='',latitude,longitude){
   const sql = `
-    UPDATE events SET eventname = '$1:value',datetime = $2,mindeposite = $3,maxdeposite = $4,address = '$5:value',about ='$6:value',latitude = $7,longitude = $8 WHERE eventid=$9
+    UPDATE events SET eventname = '$1:value',datetime = $2,mindeposit = $3,maxdeposit = $4,address = '$5:value',about ='$6:value',latitude = $7,longitude = $8 WHERE eventid=$9
     RETURNING *
   `;
-    return db.one(sql,[eventname,datetime,mindeposite,maxdeposite,address,about,latitude,longitude,eventid]);
+    db.any(`UPDATE members SET datetime = $2 WHERE eventid = $1 `,[eventid,datetime]);
+    return db.one(sql,[eventname,datetime,mindeposit,maxdeposit,address,about,latitude,longitude,eventid]);
 }
 function remove(userid='',eventid){
   const sql =`
   DELETE FROM events
   WHERE hoster=$1 AND eventid =$2
   `;
+  db.any(`DELETE FROM members WHERE eventid = $1`,[eventid]);
   return db.result(sql,[userid,eventid]);
 }
 function infoall(){
@@ -66,6 +68,13 @@ function modifymoney(eventid,userid,money){
   `;
     return db.one(sql,[eventid,userid,money]);
 }
+function modifystatus(eventid,status){
+  const sql = `
+    UPDATE events SET status=$2 WHERE eventid=$1
+    RETURNING *
+  `;
+    return db.one(sql,[eventid,status]);
+}
 module.exports = {
     list,
     create,
@@ -73,5 +82,6 @@ module.exports = {
     modify,
     remove,
     infoall,
-    modifymoney
+    modifymoney,
+    modifystatus
 };

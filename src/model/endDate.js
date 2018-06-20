@@ -13,14 +13,24 @@ function sharemoney(eventid){
   var basemoney=0;
 
   var havepeoplewin=0;
+
   return eventModel.eventinfo(eventid)
   .then((events)=>{
-    if(events)
-    sharemoney = events[0].totalmoney;
-    console.log("拿取獎金池");
-    console.log(sharemoney);
-    return memberModel.listmember(eventid);
-
+      if(events){
+        if(events[0].status !=0){
+          var error = "money has been shared";
+          console.log(error);
+          throw error;
+        }
+        else{
+          db.any(`UPDATE events SET status = 1 where eventid=$1`,[eventid]);
+          sharemoney = events[0].totalmoney;
+          console.log("拿取獎金池");
+          console.log(sharemoney);
+          return memberModel.listmember(eventid);
+        }
+      }
+    throw " events not exists";
   }).then(members =>{
     allmembers = members;
     console.log("showallmember");
@@ -30,14 +40,14 @@ function sharemoney(eventid){
     allmembers.forEach((elements)=>{
       if(elements.late == false){
         goodmembers.push(elements);
-        userinfoModel.addmoney(elements.userid,elements.deposite);
-        sharemoney -=elements.deposite;
-        basemoney  +=elements.deposite;
+        userinfoModel.addmoney(elements.userid,elements.deposit);
+        sharemoney -=elements.deposit;
+        basemoney  +=elements.deposit;
         console.log("還錢，顯示殘存獎金:");
         console.log(sharemoney);
         havepeoplewin=1;
       }else{
-        var cashflow=0-elements.deposite;
+        var cashflow=0-elements.deposit;
         const sql_no_money = `
         INSERT INTO cashflow ($<this:name>)
         VALUES
@@ -60,7 +70,7 @@ function sharemoney(eventid){
     console.log("發出獎金");
     if(havepeoplewin){
       member.forEach((elements)=>{
-        var gain = elements.deposite/basemoney*sharemoney;
+        var gain = elements.deposit/basemoney*sharemoney;
         console.log("userid: " + elements.userid + "分到" + gain );
         userinfoModel.addmoney(elements.userid,gain);
         var cashflow=gain;
@@ -86,6 +96,8 @@ function sharemoney(eventid){
     var finish = 'finsihsharemoney';
     console.log(finish);
     return finish;
+  }).catch((e)=>{
+    return e;
   });
 
 }
