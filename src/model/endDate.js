@@ -103,7 +103,7 @@ function sharemoney(eventid){
 }
 function arrive(eventid,userid='',arrivetime,late){
     const sql =`
-    UPDATE members SET arrivetime=$3,late = $4  WHERE userid = $2 AND eventid = $1
+    UPDATE members SET arrivetime=$3,late = $4,status = 1 WHERE userid = $2 AND eventid = $1
     RETURNING *`;
     return db.one(sql,[eventid,userid,arrivetime,late]);
 }

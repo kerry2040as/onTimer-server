@@ -61,7 +61,7 @@ const schemaSql = `
         arrivetime     bigint,
         late           boolean DEFAULT TRUE,
         confirm        int,
-        status          int default 0,
+        status         int default 0
 
     );
     CREATE TABLE cashflow (
