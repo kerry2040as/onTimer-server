@@ -169,7 +169,12 @@ router.get('/logByEvent',function(req,res,next){
     res.json(events);
   }).catch(next);
 });
-
+router.get('/modifyrecommendtime',function(req,res,next){
+  const {userid,recommendtime}=req.query;
+  userinfoModel.modifyrecommendtime(userid,recommendtime).then(events =>{
+    res.json(events);
+  }).catch(next);
+});
 
 
 module.exports = router;

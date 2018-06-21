@@ -44,6 +44,7 @@ const schemaSql = `
         currency        integer default 0,
         userphonenumber text,
         preparetime     bigint,
+        recommendtime   bigint,
         ts              bigint NOT NULL DEFAULT (extract(epoch from now())),
         token           text,
         status          integer default 0

@@ -65,6 +65,13 @@ function modifypreparetime(userid='',preparetime){
   `;
   return db.one(sql,[userid,preparetime]);
 }
+function modifyrecommendtime(userid='',recommendtime){
+  const sql =`
+  UPDATE userinfo SET recommendtime = $2 WHERE userid = $1
+  RETURNING *
+  `;
+  return db.one(sql,[userid,recommendtime]);
+}
 module.exports = {
     info,
     add,
@@ -72,5 +79,6 @@ module.exports = {
     modify,
     addmoney,
     modifyprofile,
-    modifypreparetime
+    modifypreparetime,
+    modifyrecommendtime
 };
