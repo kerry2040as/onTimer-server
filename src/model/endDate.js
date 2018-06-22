@@ -51,7 +51,7 @@ function sharemoney(eventid){
         const sql_no_money = `
         INSERT INTO cashflow ($<this:name>)
         VALUES
-        ($<userid>,$<username>,$<eventid>,$<eventname>,$<cashflow>,$<datetime>)
+        ($<userid>,$<username>,$<eventid>,$<hoster>,$<eventname>,$<cashflow>,$<datetime>)
         RETURNING *
         `;
         var userid=elements.userid;
@@ -59,7 +59,8 @@ function sharemoney(eventid){
         var eventid=elements.eventid;
         var eventname=elements.eventname;
         var datetime=elements.datetime;
-        var log=db.one(sql_no_money,{userid,username,eventid,eventname,cashflow,datetime});
+        var hoster  =elements.hoster;
+        var log=db.one(sql_no_money,{userid,username,eventid,hoster,eventname,cashflow,datetime});
         console.log(log);
       }
     });
@@ -77,7 +78,7 @@ function sharemoney(eventid){
         const sql_money = `
         INSERT INTO cashflow ($<this:name>)
         VALUES
-        ($<userid>,$<username>,$<eventid>,$<eventname>,$<cashflow>,$<datetime>)
+        ($<userid>,$<username>,$<eventid>,$<eventname>,$<hoster>,$<cashflow>,$<datetime>)
         RETURNING *
         `;
         var userid=elements.userid;
@@ -85,7 +86,8 @@ function sharemoney(eventid){
         var eventid=elements.eventid;
         var eventname=elements.eventname;
         var datetime=elements.datetime;
-        db.one(sql_money,{userid,username,eventid,eventname,cashflow,datetime});
+        var hoster  =elements.hoster;
+        db.one(sql_money,{userid,username,eventid,eventname,hoster,cashflow,datetime});
 
       });
     }else{

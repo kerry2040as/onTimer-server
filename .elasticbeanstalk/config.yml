@@ -2,6 +2,10 @@ branch-defaults:
   master:
     environment: onTimer-server-dev
     group_suffix: null
+environment-defaults:
+  onTimer-server-dev:
+    branch: null
+    repository: null
 global:
   application_name: onTimer_server
   branch: null

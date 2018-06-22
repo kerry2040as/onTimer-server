@@ -56,6 +56,7 @@ const schemaSql = `
         eventid        serial,
         eventname      text,
         deposit        real,
+        hoster         text,
         hostername     text,
         datetime       bigint,
         alarmtime      bigint,

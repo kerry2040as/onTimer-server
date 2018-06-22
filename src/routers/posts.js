@@ -75,14 +75,14 @@ router.post('/remevent', function(req,res,next){
   }).catch(next);
 });
 router.post('/addmembers', function(req,res,next){
-  const {userid,username,eventid,eventname,deposit,hostername,datetime,alarmtime}=req.body;
-  membersModel.add(userid,username,eventid,eventname,deposit,hostername,datetime,alarmtime).then(events =>{
+  const {userid,username,eventid,eventname,deposit,hoster,hostername,datetime,alarmtime}=req.body;
+  membersModel.add(userid,username,eventid,eventname,deposit,hoster,hostername,datetime,alarmtime).then(events =>{
       res.json(events);
   }).catch(next);
 });
 router.post('/invitemembers', function(req,res,next){
-  const {userid,username,eventid,eventname,deposit,hostername,datetime,alarmtime}=req.body;
-  membersModel.invitemembers(userid,username,eventid,eventname,deposit,hostername,datetime,alarmtime).then(events =>{
+  const {userid,username,eventid,eventname,deposit,hoster,hostername,datetime,alarmtime}=req.body;
+  membersModel.invitemembers(userid,username,eventid,eventname,deposit,hoster,hostername,datetime,alarmtime).then(events =>{
       res.json(events);
   }).catch(next);
 });

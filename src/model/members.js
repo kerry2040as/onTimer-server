@@ -18,7 +18,7 @@ function memberinfo(eventid,userid=''){
   `;
   return db.any(sql,[eventid,userid]);
 }
-function add(userid='',username='',eventid,eventname='',deposit,hostername='',datetime,alarmtime){
+function add(userid='',username='',eventid,eventname='',deposit,hoster='',hostername='',datetime,alarmtime){
 
   var confirm = 1;
   const sql_init=`
@@ -35,12 +35,12 @@ function add(userid='',username='',eventid,eventname='',deposit,hostername='',da
         sql =`
         INSERT INTO members ($<this:name>)
           VALUES
-          ($<userid>,$<username>,$<eventid>,$<eventname>,$<deposit>,$<hostername>,$<datetime>,$<alarmtime>,$<confirm>)
+          ($<userid>,$<username>,$<eventid>,$<eventname>,$<deposit>,$<hoster>,$<hostername>,$<datetime>,$<alarmtime>,$<confirm>)
           RETURNING *
         `;
           db.any(`UPDATE userinfo SET usercoins = usercoins-$2 WHERE userid = $1`,[userid,deposit]);
           db.any(`UPDATE events SET totalmoney = totalmoney+$2 WHERE eventid = $1`,[eventid,deposit]);
-          return db.one(sql,{userid,username,eventid,eventname,deposit,hostername,datetime,alarmtime,confirm});
+          return db.one(sql,{userid,username,eventid,eventname,deposit,hoster,hostername,datetime,alarmtime,confirm});
       }
     }
   );
@@ -62,7 +62,7 @@ function remove(userid='',eventid){
   `;
   return db.result(sql,[userid,eventid]);
 }
-function invitemembers(userid='',username='',eventid,eventname='',deposit,hostername='',datetime,alarmtime){
+function invitemembers(userid='',username='',eventid,eventname='',deposit,hoster,hostername='',datetime,alarmtime){
   var confirm = 0;
   const sql_init=`
   SELECT * FROM members WHERE eventid = $1 AND userid= $2
@@ -78,10 +78,10 @@ function invitemembers(userid='',username='',eventid,eventname='',deposit,hoster
         sql =`
         INSERT INTO members ($<this:name>)
           VALUES
-          ($<userid>,$<username>,$<eventid>,$<eventname>,$<deposit>,$<hostername>,$<alarmtime>,$<confirm>,$<datetime>)
+          ($<userid>,$<username>,$<eventid>,$<eventname>,$<deposit>,$hoster,$<hostername>,$<alarmtime>,$<confirm>,$<datetime>)
           RETURNING *
         `;
-          return db.one(sql,{userid,username,eventid,eventname,deposit,hostername,alarmtime,confirm,datetime});
+          return db.one(sql,{userid,username,eventid,eventname,deposit,hoster,hostername,alarmtime,confirm,datetime});
       }
     }
   );
