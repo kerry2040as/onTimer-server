@@ -71,6 +71,7 @@ const schemaSql = `
         username       text,
         eventid        serial,
         eventname      text,
+        hoster         text,
         cashflow       integer NOT NULL DEFAULT 0,
         datetime       bigint
     );
