@@ -62,7 +62,7 @@ function remove(userid='',eventid){
   `;
   return db.result(sql,[userid,eventid]);
 }
-function invitemembers(userid='',username='',eventid,eventname='',deposit,hoster,hostername='',datetime,alarmtime){
+function invitemembers(userid='',username='',eventid,eventname='',deposit,hoster='',hostername='',datetime,alarmtime){
   var confirm = 0;
   const sql_init=`
   SELECT * FROM members WHERE eventid = $1 AND userid= $2
@@ -78,7 +78,7 @@ function invitemembers(userid='',username='',eventid,eventname='',deposit,hoster
         sql =`
         INSERT INTO members ($<this:name>)
           VALUES
-          ($<userid>,$<username>,$<eventid>,$<eventname>,$<deposit>,$hoster,$<hostername>,$<alarmtime>,$<confirm>,$<datetime>)
+          ($<userid>,$<username>,$<eventid>,$<eventname>,$<deposit>,$<hoster>,$<hostername>,$<alarmtime>,$<confirm>,$<datetime>)
           RETURNING *
         `;
           return db.one(sql,{userid,username,eventid,eventname,deposit,hoster,hostername,alarmtime,confirm,datetime});
